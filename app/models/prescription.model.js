@@ -50,6 +50,7 @@ module.exports = (sequelize, Sequelize) => {
         }
     });
 };
+
 /*
 Prescription.create({
     name: "Metformin",
@@ -66,6 +67,7 @@ Prescription.create({
     expired: "10/23/2025",
     refillNote: "2 refills by 02/07/2024",
     manufacturedBy: "Mylan",
-    note: "Take with food"
+    note: "Take with food",
+    userKey: 1
 });
 */

@@ -38,10 +38,10 @@ module.exports = function(app) {
 const db = require("./app/models");
 const Prescription = db.prescription;
 /*
-    db.sequelize.sync({force: true}).then(() => {
+db.sequelize.sync({force: true}).then(() => {
         console.log('Drop and Recreate Db');
         initial();
-    });
+});
 */
 db.sequelize.sync();
 

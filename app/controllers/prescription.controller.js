@@ -175,13 +175,22 @@ exports.createPrescriptionForOwner = (req, res) => {
 
     // Create new Prescription object
     const prescription = {
-        name: req.body.name,
-        phone1: req.body.phone1 || "",
-        phone2: req.body.phone2 || "",
-        email: req.body.email || "",
-        address: req.body.address || "",
+        name: req.body.name || "",
+        identNo: req.body.identNo || "",
+        size: req.body.size || "",
+        form: req.body.form || "",
+        rxUnit: req.body.rxUnit || "",
+        quantity: req.body.quantity || "",
+        pharmacy: req.body.pharmacy || "",
+        pharmacyPhone: req.body.pharmacyPhone || "",
+        written: req.body.written || "",
+        writtenBy: req.body.writtenBy || "",
+        filled: req.body.filled || "",
+        expired: req.body.expired || "",
+        refillNote: req.body.refillNote || "",
+        manufacturedBy: req.body.manufacturedBy || "",
         note: req.body.note || "",
-        userKey: key
+        userKey: req.body.userKey || 0
     };
 
     // Create Prescription using Sequelize
