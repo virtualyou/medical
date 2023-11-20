@@ -1,12 +1,10 @@
 {
-  "name": "contacts",
-  "version": "1.0.0",
-  "description": "REST CRUD API for Contacts using Node.js, Express and MySQL",
-  "license": "Apache-2.0",
+  "name": "medical",
+  "version": "0.1.0",
+  "description": "Node.js Express Medical API on Port 3007",
   "main": "server.js",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/dlwhitehurst/contacts.git"
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "scripts": {
     "test": "jest"
@@ -22,21 +20,19 @@
     "fsevents": "~1.2.13"
   },
   "dependencies": {
-    "body-parser": "^1.19.0",
-    "express": "^4.17.1",
-    "mysql": "^2.18.1",
-    "mysql-upgrade": "^0.1.2",
-    "mysql2": "^2.2.5",
+    "bcryptjs": "^2.4.3",
+    "cookie-session": "^2.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "http-proxy-middleware": "^2.0.6",
+    "jsonwebtoken": "^9.0.0",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.31.1",
     "swagger-ui-express": "^4.1.6"
   },
+  "engines": {
+    "node": "^18.16.0"
+  },
   "devDependencies": {
-    "eslint": "^5.15.1",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.16.0",
-    "jasmine": "^3.3.1",
-    "jest": "^24.5.0",
-    "jsdoc": "^3.5.5",
-    "jshint": "^2.10.1",
-    "nodemon": "^1.18.10"
-  }
-}
+    "dotenv": "^16.3.1"
+  }}

@@ -1,163 +1,417 @@
-// ****************************************************************************
-// Copyright 2023 David L. Whitehurst
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-//
-// You may obtain a copy of the License at
-//
-//    http://www.apache.org/licenses/LICENSE-2.0
-//
-//    Unless required by applicable law or agreed to in writing, software
-//    distributed under the License is distributed on an "AS IS" BASIS,
-//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//    See the License for the specific language governing permissions and
-//    limitations under the License.
-//
-// ****************************************************************************
+/**
+ * VirtualYou
+ * @license Apache-2.0
+ * @author David L Whitehurst
+ */
 
-const Prescription = require("../models/prescription.model.js");
+const db = require("../models");
+const {locals} = require("express/lib/application");
+const Prescription = db.prescription;
 
-// Create and Save a new Prescription
-exports.create = (req, res) => {
-    // Validate request
-    if (!req.body) {
-        res.status(400).send({
-            message: "Content can not be empty!"
-        });
-    }
-    //console.log(req.body);
+/**
+ * This asynchronous controller function returns a list of all Prescriptions.
+ * The function here would only be called by ROLE_ADMIN
+ *
+ * @param {object} req - Callback parameter request.
+ * @param {object} res - Callback parameter response.
+ * @returns {Promise<void>} - To return all Prescription objects
+ */
 
-    // Create a Prescription
-    const prescription = new Prescription({
-
-        name: req.body.name,
-        identNo: req.body.identNo,
-        size: req.body.size,
-        form: req.body.form,
-        rxUnit: req.body.rxUnit,
-        quantity: req.body.quantity,
-        pharmacy: req.body.pharmacy,
-        pharmacyPhone: req.body.pharmacyPhone,
-        written: req.body.written,
-        writtenBy: req.body.writtenBy,
-        filled: req.body.filled,
-        expired: req.body.expired,
-        refillNote: req.body.refillNote,
-        manufacturedBy: req.body.manufacturedBy,
-        note: req.body.note
-    });
-
-    // Save Prescription in the database
-    Prescription.create(prescription, (err, data) => {
-        if (err)
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while creating the Prescription."
-            });
-        else {
-            res.status(201); // created (success)
-            res.send(''); // empty body
-        }
-    });
-};
-
-// Retrieve all Prescriptions from the database.
-exports.findAll = (req, res) => {
-    Prescription.getAll((err, data) => {
-        if (err)
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving prescriptions."
-            });
-        else {
-            res.header("Access-Control-Allow-Origin", "*");
+exports.getAllPrescriptions = (req, res) => {
+    Prescription.findAll()
+        .then(data => {
             res.send(data);
-        }
-    });
-};
-
-// Find a single Prescription with a prescriptionId
-exports.findOne = (req, res) => {
-    Prescription.findById(req.params.prescriptionId, (err, data) => {
-        if (err) {
-            if (err.kind === "not_found") {
-                res.status(404).send({
-                    message: `Not found Prescription with id ${req.params.prescriptionId}.`
-                });
-            } else {
-                res.status(500).send({
-                    message: "Error retrieving Prescription with id " + req.params.prescriptionId
-                });
-            }
-        } else res.send(data);
-    });
-};
-
-// Update a Prescription identified by the prescriptionId in the request
-exports.update = (req, res) => {
-    // Validate Request
-    if (!req.body) {
-        res.status(400).send({
-            message: "Content can not be empty!"
-        });
-    }
-
-    console.log(req.body);
-
-    Prescription.updateById(
-        req.params.prescriptionId,
-        new Prescription(req.body),
-        (err, data) => {
-            if (err) {
-                if (err.kind === "not_found") {
-                    res.status(404).send({
-                        message: `Not found Prescription with id ${req.params.prescriptionId}.`
-                    });
-                } else {
-                    res.status(500).send({
-                        message: "Error updating Prescription with id " + req.params.prescriptionId
-                    });
-                }
-            } else {
-                res.status(204); // no content (success)
-                res.send(''); // empty body
-            }
-        }
-    );
-};
-
-// Delete a Prescription with the specified prescriptionId in the request
-exports.delete = (req, res) => {
-    Prescription.remove(req.params.prescriptionId, (err, data) => {
-        if (err) {
-            if (err.kind === "not_found") {
-                res.status(404).send({
-                    message: `Not found Prescription with id ${req.params.prescriptionId}.`
-                });
-            } else {
-                res.status(500).send({
-                    message: "Could not delete Prescription with id " + req.params.prescriptionId
-                });
-            }
-        } else {
-            res.status(204); // no content (success)
-            res.send(''); // empty body
-        }
-    });
-};
-
-// Delete all Prescriptions from the database.
-exports.deleteAll = (req, res) => {
-    Prescription.removeAll((err, data) => {
-        if (err)
+        })
+        .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while removing all prescriptions."
+                    err.message || "Internal server error occurred while retrieving prescriptions."
             });
-        else {
-            res.status(204); // no content (success)
-            res.send(''); // empty body
-        }
-    });
+        });
 };
+
+/**
+ * This asynchronous controller function returns a list of
+ * Prescriptions specifically belonging to the Owner.
+ *
+ * The function here can be called by ROLE_OWNER, ROLE_AGENT, ROLE_MONITOR
+ *
+ * @param {object} req - Callback parameter request.
+ * @param {object} res - Callback parameter response.
+ * @returns {Promise<void>} - To return Prescription objects
+ */
+
+exports.getAllPrescriptionsForOwner = (req, res) => {
+
+    if (req.ownerId === 0) {
+        console.log("ownerId " + req.ownerId);
+        key = req.userId;
+    } else {
+        key = req.ownerId;
+        console.log("ownerId " + req.ownerId);
+    }
+
+    Prescription.findAll({
+            where: {
+                userKey: key,
+            },
+        }
+    )
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "Internal server error occurred while retrieving prescriptions."
+            });
+        });
+};
+
+/**
+ * This controller function returns a Prescription
+ * based on it's primary key or id.
+ *
+ * The function here would ONLY be called by ROLE_ADMIN
+ *
+ * @param {object} req - Callback parameter request.
+ * @param {object} res - Callback parameter response.
+ * @returns {Promise<void>} - To return Prescription object
+ */
+
+exports.getPrescription = (req, res) => {
+    const id = req.params.id;
+
+    Prescription.findByPk(id)
+        .then(data => {
+            if (data) {
+                res.send(data);
+            } else {
+                res.status(404).send({
+                    message: `Cannot find Prescription with id=${id}.`
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Internal server error retrieving Prescription with id=" + id
+            });
+        });
+};
+
+/**
+ * This controller function returns a Prescription
+ * based on it's id and ONLY IF the Prescription belongs to the
+ * Owner.
+ *
+ * The function here would only be called by ROLE_ADMIN
+ *
+ * @param {object} req - Callback parameter request.
+ * @param {object} res - Callback parameter response.
+ * @returns {Promise<void>} - To return Prescription object
+ */
+
+exports.getPrescriptionForOwner = (req, res) => {
+    const id = req.params.id;
+
+    if (req.ownerId === 0) {
+        console.log("ownerId " + req.ownerId);
+        key = req.userId;
+    } else {
+        key = req.ownerId;
+        console.log("ownerId " + req.ownerId);
+    }
+
+    Prescription.findOne({
+        where: {
+            id: id,
+            userKey: key
+        }
+    })
+        .then(data => {
+            if (data) {
+                res.send(data);
+            } else {
+                res.status(404).send({
+                    message: `May not belong to Owner or cannot find this Prescription with id=${id}.`
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Internal server error retrieving Prescription with id=" + id
+            });
+        });
+};
+
+/**
+ * This controller function creates a Prescription
+ *
+ * The function here can be called by ROLE_OWNER and
+ * ROLE_AGENT
+ *
+ * @param {object} req - Callback parameter request.
+ * @param {object} res - Callback parameter response.
+ * @returns {Promise<void>} - Promise Return
+ */
+exports.createPrescriptionForOwner = (req, res) => {
+
+    // Check request
+    if (!req.body.name) {
+        res.status(400).send({
+            message: "Bad Request, name cannot be empty!"
+        });
+        return;
+    }
+
+    // Owner may be creating the Prescription
+    if (req.ownerId === 0) {
+        console.log("key " + req.userId);
+        key = req.userId;
+    } else {
+        key = req.ownerId;
+        console.log("key " + req.ownerId);
+    }
+
+    // Create new Prescription object
+    const prescription = {
+        name: req.body.name,
+        phone1: req.body.phone1 || "",
+        phone2: req.body.phone2 || "",
+        email: req.body.email || "",
+        address: req.body.address || "",
+        note: req.body.note || "",
+        userKey: key
+    };
+
+    // Create Prescription using Sequelize
+    Prescription.create(prescription)
+        .then(data => {
+            res.status(201).send(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "An internal server error occurred creating the Prescription."
+            });
+        });
+};
+
+exports.updatePrescription = (req, res) => {
+    const id = req.params.id;
+
+    Prescription.update(req.body, {
+        where: {
+            id: id
+        }
+    })
+        .then(num => {
+            if (num == 1) {
+                res.send({
+                    message: "Prescription was updated successfully!"
+                });
+            } else {
+                res.status(404).send({
+                    message: `Prescription with id=${id} could not be found!`
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Internal server error occurred while updating Prescription with id=" + id
+            });
+        });
+};
+
+exports.updatePrescriptionForOwner = (req, res) => {
+    const id = req.params.id;
+
+    // Owner may be creating the Prescription
+    if (req.ownerId === 0) {
+        console.log("key " + req.userId);
+        key = req.userId;
+    } else {
+        key = req.ownerId;
+        console.log("key " + req.ownerId);
+    }
+
+    Prescription.update(req.body, {
+        where: {
+            id: id,
+            userKey: key
+        }
+    })
+        .then(num => {
+            if (num == 1) {
+                res.send({
+                    message: "Prescription was updated successfully!"
+                });
+            } else {
+                res.status(404).send({
+                    message: `Prescription with id=${id} may not belong to owner or could not be found!`
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Internal server error occurred while updating Prescription with id=" + id
+            });
+        });
+};
+
+
+/**
+ * This asynchronous controller function deletes a Prescription
+ * based on it's primary key or id.
+ *
+ * The function here would ONLY be called by ROLE_ADMIN
+ *
+ * @param {object} req - Callback parameter request.
+ * @param {object} res - Callback parameter response.
+ * @returns {Promise<void>} - Return Promise
+ */
+
+exports.deletePrescription = (req, res) => {
+    // url parameter
+    const id = req.params.id;
+
+    // delete specific record
+    Prescription.destroy({
+        where: {
+            id: id
+        }
+    })
+        .then(num => {
+            if (num == 1) {
+                return res.status(200).send({
+                    message: "Prescription was deleted!"
+                });
+            } else {
+                res.status(404).send({
+                    message: `Prescription was not found!`
+                });
+            }
+        })
+        .catch(err => {
+            return res.status(500).send({
+                message: "Prescription with id=" + id + " could not be deleted!"
+            });
+        });
+}
+
+/**
+ * This asynchronous controller function deletes a Prescription
+ * based on it's id and ONLY if it belongs to the
+ * Owner.
+ *
+ * The function here can be called by ROLE_OWNER and
+ * ROLE_AGENT.
+ *
+ * @param {object} req - Callback parameter request.
+ * @param {object} res - Callback parameter response.
+ * @returns {Promise<void>} - Return Promise
+ */
+
+exports.deletePrescriptionForOwner = (req, res) => {
+    // url parameter
+    const id = req.params.id;
+
+    // if ownerId = 0 then user is owner
+    if (req.ownerId === 0) {
+        console.log("key " + req.userId);
+        key = req.userId;
+    } else {
+        key = req.ownerId;
+        console.log("key " + req.ownerId);
+    }
+
+    // delete specific record
+    Prescription.destroy({
+        where: {
+            id: id,
+            userKey: key
+        }
+    }).then(num => {
+        if (num == 1) {
+            return res.status(200).send({
+                message: "Prescription was deleted!"
+            });
+        } else {
+            res.status(404).send({
+                message: `Prescription was not found!`
+            });
+        }
+    })
+        .catch(err => {
+            return res.status(500).send({
+                message: "Prescription with id=" + id + " could not be deleted!"
+            });
+        });
+}
+
+/**
+ * This asynchronous controller function deletes all
+ * Prescriptions.
+ *
+ * The function here would ONLY be called by ROLE_ADMIN
+ *
+ * @param {object} req - Callback parameter request.
+ * @param {object} res - Callback parameter response.
+ * @returns {Promise<void>} - Return Promise
+ */
+
+exports.deleteAllPrescriptions = (req, res) => {
+
+    Prescription.destroy({
+        where: {},
+        truncate: false
+    })
+        .then(nums => {
+            res.status(200).send({ message: `${nums} Prescriptions were deleted successfully!` });
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "An error occurred while truncating prescriptions!"
+            });
+        });
+}
+
+/**
+ * This asynchronous controller function deletes all
+ * Prescriptions for the session Owner.
+ *
+ * The function here can be called by ROLE_OWNER and
+ * ROLE_AGENT.
+ *
+ * @param {object} req - Callback parameter request.
+ * @param {object} res - Callback parameter response.
+ * @returns {Promise<void>} - Return Promise
+ */
+
+exports.deleteAllPrescriptionsForOwner = (req, res) => {
+
+    // if ownerId = 0 then user is owner
+    if (req.ownerId === 0) {
+        console.log("key " + req.userId);
+        key = req.userId;
+    } else {
+        key = req.ownerId;
+        console.log("key " + req.ownerId);
+    }
+
+    Prescription.destroy({
+        where: {userKey: key},
+        truncate: false
+    })
+        .then(nums => {
+            res.status(200).send({ message: `${nums} Prescriptions were deleted successfully!` });
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "An error occurred while truncating prescriptions!"
+            });
+        });
+}
+
