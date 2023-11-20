@@ -1,0 +1,159 @@
+{
+	"info": {
+		"_postman_id": "531ab3a8-2552-4ade-a712-60724ac07dde",
+		"name": "vy-medical-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9423852"
+	},
+	"item": [
+		{
+			"name": "All Prescriptions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/prescriptions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"prescriptions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Prescription",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/prescriptions/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"prescriptions",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add New Prescription",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "  {\r\n    \"name\": \"Benedryl\",\r\n    \"identNo\": \"6792999\",\r\n    \"size\": \"\",\r\n    \"form\": \"tablet\",\r\n    \"rxUnit\": \"10mg\",\r\n    \"quantity\": \"60\",\r\n    \"pharmacy\": \"Kroger\",\r\n    \"pharmacyPhone\": \"919-567-5499\",\r\n    \"written\": \"10/23/2023\",\r\n    \"writtenBy\": \"Dr. Smith\",\r\n    \"filled\": \"10/23/2023\",\r\n    \"expired\": \"10/23/2025\",\r\n    \"refillNote\": \"No refills remaining\",\r\n    \"manufacturedBy\": \"Bayer\",\r\n    \"note\": \"Take at night\"\r\n  }"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/prescriptions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"prescriptions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update a Prescription",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "  {\r\n    \"name\": \"Benedryl\",\r\n    \"identNo\": \"6792999\",\r\n    \"size\": \"\",\r\n    \"form\": \"tablet\",\r\n    \"rxUnit\": \"50mg\",\r\n    \"quantity\": \"60\",\r\n    \"pharmacy\": \"Kroger\",\r\n    \"pharmacyPhone\": \"919-567-5499\",\r\n    \"written\": \"10/23/2023\",\r\n    \"writtenBy\": \"Dr. Smith\",\r\n    \"filled\": \"10/23/2023\",\r\n    \"expired\": \"10/23/2025\",\r\n    \"refillNote\": \"No refills remaining\",\r\n    \"manufacturedBy\": \"Bayer\",\r\n    \"note\": \"Take at night\"\r\n  }"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/prescriptions/4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"prescriptions",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a Prescription",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/prescriptions/4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"prescriptions",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete All Prescriptions",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/prescriptions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"prescriptions"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
