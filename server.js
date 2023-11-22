@@ -45,47 +45,19 @@ db.sequelize.sync({force: true}).then(() => {
 */
 db.sequelize.sync();
 
-// swagger api documentation
-const swaggerUi = require("swagger-ui-express"),
-    swaggerDocument = require("./swagger.json");
-
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to the VirtualYou Medical Secure API Express application." });
+  res.json({ message: "Welcome to the VirtualYou Medical API." });
 });
 
 // routes
 require("./app/routes/prescription.routes")(app);
 
-// swagger path to api documentation
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
 // set port, listen for requests
-const PORT = process.env.PORT || 3007;
+const PORT = process.env.PORT || 3003;
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
-
-/*
-  {
-    "name": "Metformin",
-    "identNo": "6792303",
-    "size": "",
-    "form": "tablet",
-    "rxUnit": "500mg",
-    "quantity": "60",
-    "pharmacy": "Kroger",
-    "pharmacyPhone": "919-567-5499",
-    "written": "10/23/2023",
-    "writtenBy": "Dr. Smith",
-    "filled": "10/23/2023",
-    "expired": "10/23/2025",
-    "refillNote": "2 refills by 02/07/2024",
-    "manufacturedBy": "Mylan",
-    "note": "Take with food",
-    "userKey": 10
-  }
-*/
 
 function initial() {
   Prescription.create({
