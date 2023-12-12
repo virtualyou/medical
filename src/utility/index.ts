@@ -18,8 +18,8 @@
  *
  */
 
-const authJwt = require("./authJwt");
+import authJwt from "./authJwt";
 
 module.exports = {
-  authJwt
+  authJwt,
 };
