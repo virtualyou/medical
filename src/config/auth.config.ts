@@ -16,8 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
+ * auth.config.ts
  */
 
-module.exports = {
+const cookieConfig = {
   secret: "virtual-you-secret"
 };
+
+export default cookieConfig;
