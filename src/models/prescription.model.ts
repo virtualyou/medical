@@ -1,4 +1,3 @@
-
 /*
  *
  * VirtualYou Project
@@ -16,9 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
+ * prescription.model.ts
  */
 
-module.exports = (sequelize, Sequelize) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const prescription = (sequelize: any, Sequelize: any) => {
     return sequelize.define("prescriptions", {
         name: {
             type: Sequelize.STRING
@@ -71,23 +72,4 @@ module.exports = (sequelize, Sequelize) => {
     });
 };
 
-/*
-Prescription.create({
-    name: "Metformin",
-    identNo": "6792303",
-    size: "",
-    form: "tablet",
-    rxUnit: "500mg",
-    quantity: "60",
-    pharmacy: "Kroger",
-    pharmacyPhone: "919-567-5499",
-    written: "10/23/2023",
-    writtenBy: "Dr. Smith",
-    filled: "10/23/2023",
-    expired: "10/23/2025",
-    refillNote: "2 refills by 02/07/2024",
-    manufacturedBy: "Mylan",
-    note: "Take with food",
-    userKey: 1
-});
-*/
+export default prescription;

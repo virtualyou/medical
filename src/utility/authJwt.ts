@@ -17,7 +17,6 @@
  * limitations under the License.
  *
  */
-//import * as dotenv from 'dotenv';
 
 import jwt from 'jsonwebtoken';
 import cookieConfig from '../config/auth.config';

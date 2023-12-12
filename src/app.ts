@@ -22,7 +22,7 @@ import express, {type Express} from "express";
 import cors from "cors";
 import * as dotenv from "dotenv";
 import db from "./models/index";
-import docRouter from "./routes/doc.routes";
+import prescriptionRouter from "./routes/prescription.routes";
 import cookieSession from "cookie-session";
 import * as process from "process";
 
@@ -56,11 +56,11 @@ app.use(function (_req, res, next) {
 });
 
 app.get("/", (_req, res) => {
-    res.send("Welcome to the VirtuaYou UserAuth API.");
+    res.send("Welcome to the VirtuaYou Medical API.");
 });
 
 // database
-const Doc = db.doc;
+const Prescription = db.prescription;
 
 if (init) {
     db.sequelize.sync({force: true}).then(() => {
@@ -72,25 +72,68 @@ if (init) {
 }
 
 // routes
-app.use(docRouter);
+app.use(prescriptionRouter);
 
 // create reference role objects
 function initial() {
-    Doc.create({
-        id: 1,
-        name: "Health Care Directive",
-        type: "Google Drive Doc",
-        link: "https://drive.google.com/file/d/1jdCdPD23QS2_L9WJqUKGl9A551PfxmSS/view?usp=drive_link",
+// new model objects here
+    Prescription.create({
+        name: "Metformin",
+        identNo: "6792303",
+        size: "",
+        form: "tablet",
+        rxUnit: "500mg",
+        quantity: "60",
+        pharmacy: "Kroger",
+        pharmacyPhone: "919-567-5499",
+        written: "10/23/2023",
+        writtenBy: "Dr. Smith",
+        filled: "10/23/2023",
+        expired: "10/23/2025",
+        refillNote: "2 refills by 02/07/2024",
+        manufacturedBy: "Mylan",
+        note: "Take with food",
         userKey: 1
     });
 
-    Doc.create({
-        id: 2,
-        name: "Last Will and Testament",
-        type: "Google Drive Doc",
-        link: "https://drive.google.com/file/d/1RlBpKPUWtAagUz5RjaAFmFLu6PW9F-8o/view?usp=drive_link",
+    Prescription.create({
+        name: "Pravastatin",
+        identNo: "6733303",
+        size: "",
+        form: "tablet",
+        rxUnit: "20mg",
+        quantity: "60",
+        pharmacy: "Kroger",
+        pharmacyPhone: "919-567-5499",
+        written: "10/23/2023",
+        writtenBy: "Dr. Smith",
+        filled: "10/23/2023",
+        expired: "10/23/2025",
+        refillNote: "2 refills by 02/07/2024",
+        manufacturedBy: "Zocor",
+        note: "Take one tablet nightly",
         userKey: 1
     });
+
+    Prescription.create({
+        name: "Amlodipine",
+        identNo: "6802323",
+        size: "",
+        form: "tablet",
+        rxUnit: "10mg",
+        quantity: "60",
+        pharmacy: "Kroger",
+        pharmacyPhone: "919-567-5499",
+        written: "10/23/2023",
+        writtenBy: "Dr. Smith",
+        filled: "10/23/2023",
+        expired: "10/23/2025",
+        refillNote: "2 refills by 02/07/2024",
+        manufacturedBy: "Eli Lily",
+        note: "Take as needed",
+        userKey: 1
+    });
+
 }
 
 export default app;

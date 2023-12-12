@@ -1,4 +1,3 @@
-
 /*
  *
  * VirtualYou Project
@@ -16,32 +15,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
+ * endpoints.test.ts
  */
 
-const config = require("../config/db.config.js");
+import request from "supertest";
+import app from "../src/app";
 
-const Sequelize = require("sequelize");
-const sequelize = new Sequelize(
-    config.DB,
-    config.USER,
-    config.PASSWORD,
-    {
-        host: config.HOST,
-        dialect: config.dialect,
-        pool: {
-            max: config.pool.max,
-            min: config.pool.min,
-            acquire: config.pool.acquire,
-            idle: config.pool.idle
-        }
-    }
-);
+describe("Test get all owner prescriptions", () => {
+  const agent = request.agent(app);
+  it("GET /medical/v1/owner/prescriptions", async () => {
+    const response2 = await agent.get("/medical/v1/owner/prescriptions"); //.set(cookie);
+    expect(response2.statusCode).toBe(403);
+    expect(response2.type).toBe("application/json");
+    expect(response2.body).toEqual({"message": "No token provided!"});
+  });
+});
 
-const db = {};
-
-db.Sequelize = Sequelize;
-db.sequelize = sequelize;
-
-db.prescription = require("./prescription.model.js")(sequelize, Sequelize);
-
-module.exports = db;
