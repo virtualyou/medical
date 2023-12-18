@@ -11,7 +11,7 @@
     "written": "10/23/2023",
     "writtenBy": "Dr. Smith",
     "filled": "10/23/2023",
-    "expired": "10/23/2025",
+    "expires": "10/23/2025",
     "refillNote": "2 refills by 03/23/2024",
     "manufacturedBy": "Becton",
     "note": ""
@@ -28,7 +28,7 @@
     "written": "10/23/2023",
     "writtenBy": "Dr. Smith",
     "filled": "10/23/2023",
-    "expired": "10/23/2025",
+    "expires": "10/23/2025",
     "refillNote": "2 refills by 02/07/2024",
     "manufacturedBy": "Mylan",
     "note": "Take with food"

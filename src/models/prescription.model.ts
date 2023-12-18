@@ -18,6 +18,8 @@
  * prescription.model.ts
  */
 
+import { DataTypes } from 'sequelize';
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const prescription = (sequelize: any, Sequelize: any) => {
     return sequelize.define("prescriptions", {
@@ -46,16 +48,16 @@ const prescription = (sequelize: any, Sequelize: any) => {
             type: Sequelize.STRING
         },
         written: {
-            type: Sequelize.STRING
+            type: DataTypes.DATE
         },
         writtenBy: {
             type: Sequelize.STRING
         },
         filled: {
-            type: Sequelize.STRING
+            type: DataTypes.DATE
         },
-        expired: {
-            type: Sequelize.STRING
+        expires: {
+            type: DataTypes.DATE
         },
         refillNote: {
             type: Sequelize.STRING
