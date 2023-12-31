@@ -48,16 +48,19 @@ const prescription = (sequelize: any, Sequelize: any) => {
             type: Sequelize.STRING
         },
         written: {
-            type: DataTypes.DATE
+            type: DataTypes.DATE,
+            allowNull: true
         },
         writtenBy: {
             type: Sequelize.STRING
         },
         filled: {
-            type: DataTypes.DATE
+            type: DataTypes.DATE,
+            allowNull: true
         },
         expires: {
-            type: DataTypes.DATE
+            type: DataTypes.DATE,
+            allowNull: true
         },
         refillNote: {
             type: Sequelize.STRING
