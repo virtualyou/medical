@@ -25,6 +25,9 @@ import db from "./models/index";
 import prescriptionRouter from "./routes/prescription.routes";
 import cookieSession from "cookie-session";
 import * as process from "process";
+// swagger api documentation
+import swaggerUi from "swagger-ui-express";
+import swaggerDocument from "../swagger.json";
 
 const initIndex = process.argv.indexOf("--init=true");
 const init = initIndex !== -1;
@@ -59,6 +62,9 @@ app.use(function (_req, res, next) {
 app.get("/", (_req, res) => {
     res.send("Welcome to the VirtualYou Medical API.");
 });
+
+// swagger path to documentation
+app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // database
 const Prescription = db.prescription;
